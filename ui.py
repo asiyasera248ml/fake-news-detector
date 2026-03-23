@@ -5,34 +5,28 @@ from sklearn.linear_model import LogisticRegression
 
 st.title("📰 Fake News Detector")
 
-# Load dataset from internet
-@st.cache_data
-def load_data():
-    fake_url = "https://raw.githubusercontent.com/abisee/cnn-dailymail/master/url_lists/all_train.txt"
-real_url = "https://raw.githubusercontent.com/abisee/cnn-dailymail/master/url_lists/all_val.txt"
+# Small but better dataset (realistic)
+data = {
+    "text": [
+        "The government has launched a new policy to improve education in rural areas",
+        "Scientists discovered a new planet similar to Earth in a distant galaxy",
+        "The stock market saw a significant rise due to strong earnings reports",
+        "Drinking hot water every hour cures all diseases instantly",
+        "Aliens have landed in New York and met government officials secretly",
+        "A man claims he can become invisible by using a special chemical formula"
+    ],
+    "label": [1, 1, 1, 0, 0, 0]
+}
 
-    fake = pd.read_csv(fake_url)
-    real = pd.read_csv(real_url)
-
-    fake["label"] = 0
-    real["label"] = 1
-
-    data = pd.concat([fake, real])
-    data.columns = data.columns.str.strip()
-
-    return data
-
-data = load_data()
+df = pd.DataFrame(data)
 
 # Train model
-X = data["text"]
-y = data["label"]
-
 vectorizer = TfidfVectorizer(stop_words="english")
-X_vec = vectorizer.fit_transform(X)
+X = vectorizer.fit_transform(df["text"])
+y = df["label"]
 
 model = LogisticRegression()
-model.fit(X_vec, y)
+model.fit(X, y)
 
 # UI
 user_input = st.text_area("Enter news text:")
