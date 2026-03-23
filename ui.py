@@ -8,8 +8,8 @@ st.title("📰 Fake News Detector")
 # Load dataset from internet
 @st.cache_data
 def load_data():
-    fake_url = "https://raw.githubusercontent.com/selva86/datasets/master/Fake.csv"
-    real_url = "https://raw.githubusercontent.com/selva86/datasets/master/True.csv"
+    fake_url = "https://raw.githubusercontent.com/abisee/cnn-dailymail/master/url_lists/all_train.txt"
+real_url = "https://raw.githubusercontent.com/abisee/cnn-dailymail/master/url_lists/all_val.txt"
 
     fake = pd.read_csv(fake_url)
     real = pd.read_csv(real_url)
