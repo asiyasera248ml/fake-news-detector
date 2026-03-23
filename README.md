@@ -53,7 +53,7 @@ streamlit run ui.py
 
 ## 🌐 Live Demo
 
-(Add your deployed link here)
+(https://fake-news-detector-equhc4dz5ymt3vqfdtqcnw.streamlit.app/)
 
 ---
 
@@ -66,5 +66,5 @@ https://www.kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset
 ## 👩‍💻 Author
 Syeda Asiya Erum
 
-**Erum Asiya**
+
 
