@@ -3,18 +3,16 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 
-# Page config
-st.set_page_config(page_title="Fake News Detector", page_icon="📰")
-
-# Title
 st.title("📰 Fake News Detector")
-st.write("Check whether a news is Real or Fake using AI")
 
-# Load data
+# Load dataset from internet
 @st.cache_data
 def load_data():
-    fake = pd.read_csv("Fake.csv", encoding='latin1', on_bad_lines='skip', engine='python')
-    real = pd.read_csv("True.csv", encoding='latin1', on_bad_lines='skip', engine='python')
+    fake_url = "https://raw.githubusercontent.com/selva86/datasets/master/Fake.csv"
+    real_url = "https://raw.githubusercontent.com/selva86/datasets/master/True.csv"
+
+    fake = pd.read_csv(fake_url)
+    real = pd.read_csv(real_url)
 
     fake["label"] = 0
     real["label"] = 1
@@ -27,37 +25,26 @@ def load_data():
 data = load_data()
 
 # Train model
-@st.cache_resource
-def train_model(data):
-    X = data["text"]
-    y = data["label"]
+X = data["text"]
+y = data["label"]
 
-    vectorizer = TfidfVectorizer(stop_words="english")
-    X_vec = vectorizer.fit_transform(X)
+vectorizer = TfidfVectorizer(stop_words="english")
+X_vec = vectorizer.fit_transform(X)
 
-    model = LogisticRegression()
-    model.fit(X_vec, y)
+model = LogisticRegression()
+model.fit(X_vec, y)
 
-    return model, vectorizer
+# UI
+user_input = st.text_area("Enter news text:")
 
-model, vectorizer = train_model(data)
-
-# Input box
-user_input = st.text_area("✍️ Enter News Text:", height=150)
-
-# Button
-if st.button("🔍 Check News"):
+if st.button("Check"):
     if user_input.strip() == "":
-        st.warning("⚠️ Please enter some text")
+        st.warning("Please enter text")
     else:
         vec = vectorizer.transform([user_input])
         result = model.predict(vec)
 
         if result[0] == 1:
-            st.success("✅ This is REAL news")
+            st.success("✅ Real News")
         else:
-            st.error("❌ This is FAKE news")
-
-# Footer
-st.markdown("---")
-st.caption("Built using Python, Machine Learning & Streamlit")
+            st.error("❌ Fake News")
